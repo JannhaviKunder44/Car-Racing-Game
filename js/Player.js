@@ -34,16 +34,21 @@ class Player {
         finishedPlayers = data.val();
     });
 }
-/*
+
+
 static updateFinishedPlayers(){
-    database.ref('/').update({
-        finishedPlayers: finishedPlayers + 1
-    });
-    this.place += 1;
-}*/
+  database.ref('/').update({finishedPlayers:finishedPlayers+1})
+    this.place+=1
+}
 
+getFinishedPlayers(){
+  var finishedPlayersRef = database.ref('finishedPlayers').on("value",data=>{
+    finishedPlayers = data.val();
 
-  static getPlayerInfo(){
+  })
+}
+
+static getPlayerInfo(){
     var playerInfoRef = database.ref('players');
     playerInfoRef.on("value",(data)=>{
       allPlayers = data.val();

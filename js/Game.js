@@ -43,6 +43,7 @@ class Game {
             car4 = createSprite(700,200);
             car4.debug="true";
             car4.addImage("car4",car4_img);
+            passedFinish = false
 
             cars = [car1, car2, car3, car4];
           }
@@ -51,6 +52,8 @@ class Game {
             form.hide();
         
             Player.getPlayerInfo();
+            player.getFinishedPlayers();
+
             
             if(allPlayers !== undefined){
               //var display_position = 100;
@@ -60,7 +63,7 @@ class Game {
               var index =0;
         
               //x and y position of the cars
-              var x =200;
+              var x =100;
               var y;
         
               for(var plr in allPlayers){
@@ -94,7 +97,7 @@ class Game {
             }
         
             
-            if(player.distance < 2150){
+            if(player.distance < 3200){
               if(keyIsDown(38) && player.index !== null){
                   yVel += 0.9;
                   if(keyIsDown(37)){
@@ -111,6 +114,22 @@ class Game {
                   xVel *= 0.985;
               }
             }
+            else if(passedFinish == false){
+              yVel*= 0.7;
+              xVel*= 0.7;
+              Player.updateFinishedPlayers()
+              player.place = finishedPlayers;
+              player.update();
+              passedFinish = true;
+
+
+            }
+            else{
+              yVel *= 0.8;
+              xVel *= 0.8;
+
+
+            }
         
           //move the car
           player.distance += yVel;
@@ -121,6 +140,31 @@ class Game {
           //display sprites
           drawSprites();
         }
+        displayRanks(){
+          camera.position.x = 0;
+          camera.position.y = 0;
+          imageMode(CENTER);
+          Player.getPlayerInfo();
+          image(bronze,displayWidth/-4, -100 +displayHeight/9, 200,240);
+          image(silver,displayWidth/4, -100 +displayHeight/10, 225,270);
+          image(gold,0,-100,250,300);
+          textAlign(CENTER)
+          textSize(50);
+          for(var plr in allPlayers){
+            if(allPlayers[plr].place === 1  ){
+              text(" first "+ allPlayers[plr].name,0,85)
+
+            }else if(allPlayers[plr].place === 2  ){
+              text(" second "+ allPlayers[plr].name,displayWidth/4, displayHeight/9 +73)
+
+            }else if(allPlayers[plr].place === 3  ){
+              text(" third "+ allPlayers[plr].name,displayWidth/-4, displayHeight/10 +76)
+
+            }
+          
+          }
+        }
+
            
       
         }
